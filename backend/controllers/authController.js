@@ -3,7 +3,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name,
+    email,
+    password,
+    gender,
+    phone,
+    department } = req.body;
 
   const exists = await User.findOne({ email });
   if (exists) return res.status(400).json({ message: "Exists" });
@@ -16,6 +21,9 @@ exports.register = async (req, res) => {
     name,
     email,
     password: hashed,
+    gender,
+    phone,
+    department,
     role: count === 0 ? "admin" : "user"
   });
 
@@ -24,15 +32,38 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
-  const ok = await bcrypt.compare(req.body.password, user.password);
+  try {
+    const { email, password } = req.body;
 
-  if (!ok) return res.status(401).json({ message: "Invalid" });
+    const user = await User.findOne({ email });
 
-  const token = jwt.sign(
-    { id: user._id, empId: user.empId, role: user.role },
-    process.env.JWT_SECRET
-  );
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
 
-  res.json({ token, user });
+    const ok = await bcrypt.compare(password, user.password);
+
+    if (!ok) {
+      return res.status(401).json({
+        message: "Invalid password"
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        empId: user.empId,
+        role: user.role
+      },
+      process.env.JWT_SECRET
+    );
+
+    res.json({ token, user });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
 };

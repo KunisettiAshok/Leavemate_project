@@ -5,37 +5,44 @@ import { nodeApi } from 'src/environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class LeaveService {
-  private base = `${nodeApi}/leaves`;
+  
+  private nodeApi = nodeApi;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
+  // Apply Leave
   applyLeave(data: FormData): Observable<any> {
-    return this.http.post(`${this.base}/apply`, data);
+    return this.http.post(`${this.nodeApi}/leaves/applyleave`, data);
   }
 
+  // My Leaves
   myLeaves(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.base}/my`);
+    return this.http.get<any[]>(`${this.nodeApi}/leaves/myleaves`);
   }
 
+  // Admin Pending
   adminApprovals(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.base}/pending`);
+    return this.http.get<any[]>(`${this.nodeApi}/leaves/pending`);
   }
 
-  updateApproval(id: number, status: 'approved' | 'rejected', comment?: string) {
-    return this.http.put(`${this.base}/${id}/status`, {
+  // Approve / Reject
+  updateApproval(id: string, status: 'approved' | 'rejected', comment?: string) {
+    return this.http.put(`${this.nodeApi}/${id}/leaves/status`, {
       status,
       manager_comment: comment || ''
     });
   }
 
+  // Balance API
+  getBalance(): Observable<any> {
+    return this.http.get(`${nodeApi}/profile/balance`);
+  }
+
   getApprovedLeaves(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.base}/approved`);
+    return this.http.get<any[]>(`${this.nodeApi}/leaves/approved`);
   }
 
   getRejectedLeaves(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.base}/rejected`);
+    return this.http.get<any[]>(`${this.nodeApi}/leaves/rejected`);
   }
-
-  
 }
-

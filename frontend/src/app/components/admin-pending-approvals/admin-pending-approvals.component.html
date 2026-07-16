@@ -45,17 +45,15 @@
               <td>{{ r.days || calcDays(r.start_date, r.end_date) }}</td>
               <td>{{ r.reason }}</td>
               <td>
-                <span class="badge text-white px-2 py-1" [ngClass]="{
-                        'bg-warning text-dark': r.status==='pending',
-                        'bg-success': r.status==='approved',
+                <span class="badge text-white px-2 py-1" [ngClass]="{'bg-warning text-dark': r.status==='pending', 'bg-success': r.status==='approved',
                         'bg-danger': r.status==='rejected'
                       }">
                   {{ r.status | titlecase }}
                 </span>
               </td>
               <td class="text-center align-middle">
-                <ng-container *ngIf="r.file_url; else noFile">
-                  <a [href]="'http://10.70.9.93:3000' + r.fileUrl" target="_blank" rel="noopener noreferrer"
+                <ng-container *ngIf="r.fileUrl; else noFile">
+                  <a [href]="'http://10.70.9.160:3000' + r.fileUrl" target="_blank" rel="noopener noreferrer"
                     class="text-decoration-none">
                     <i class="bi bi-paperclip fs-5"></i>
                   </a>
@@ -63,10 +61,27 @@
                 <ng-template #noFile>-</ng-template>
               </td>
 
+              <div class="card shadow mt-4" *ngIf="selectedFile">
+                <div class="card-header">
+                  <h5 class="mb-0">Attachment Preview</h5>
+                </div>
+
+                <div class="card-body text-center">
+
+                  <!-- Image -->
+                  <img *ngIf="isImage(selectedFile)" [src]="baseUrl + selectedFile" class="img-fluid rounded"
+                    style="max-height:500px;">
+
+                  <!-- PDF -->
+                  <iframe *ngIf="isPdf(selectedFile)" [src]="baseUrl + selectedFile" width="100%" height="600">
+                  </iframe>
+
+                </div>
+              </div>
               <td class="text-center align-middle action-cell">
                 <div class="d-flex justify-content-center gap-3">
-                  <button class="btn btn-success btn-sm"  (click)="act(r.id, 'approved')">Approve</button>
-                  <button class="btn btn-danger btn-sm" (click)="act(r.id, 'rejected')">Reject</button>
+                  <button class="btn btn-success btn-sm" (click)="act(r._id, 'approved')">Approve</button>
+                  <button class="btn btn-danger btn-sm" (click)="act(r._id, 'rejected')">Reject</button>
                 </div>
               </td>
 

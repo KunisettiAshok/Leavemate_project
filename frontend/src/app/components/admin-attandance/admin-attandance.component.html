@@ -72,8 +72,8 @@
                             <td>{{ r.empId }}</td>
                             <td>{{ r.name }}</td>
                             <td>{{ r.date | date:'dd-MM-yyyy' }}</td>
-                            <td>{{ formatTime(r.login_time) }}</td>
-                            <td>{{ formatTime(r.logout_time) }}</td>
+                            <td>{{ formatTime(r.loginTime) }}</td>
+                            <td>{{ formatTime(r.logoutTime) }}</td>
                             <td>{{ r.status }}</td>
                             <td>
                                 <ng-container *ngIf="r.latitude && r.longitude; else noLoc">

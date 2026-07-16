@@ -1,4 +1,4 @@
-<div class="container mt-4" style="max-width: 900px;">
+<div class="container mt-4" style="max-width: 1200px;">
   <div class="card shadow rounded-4 border-0">
     <div class="card-body p-4">
       <!-- Title -->
@@ -43,8 +43,8 @@
             <tbody>
               <tr *ngFor="let row of attendanceList">
                 <td>{{ formatDateTime(row.date) | date:'d MMM y' }}</td>
-                <td>{{ formatTime(row.login_time) || '-' }}</td>
-                <td>{{ formatTime(row.logout_time) || '-' }}</td>
+                <td>{{ formatTime(row.loginTime) || '-' }}</td>
+                <td>{{ formatTime(row.logoutTime) || '-' }}</td>
                 <td>
                   <span class="badge badge-sm rounded-pill d-inline-flex align-items-center" [ngClass]="{
                       'bg-success': row.status==='Present' || row.status==='Normal Logout',

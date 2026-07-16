@@ -13,8 +13,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // User routes
-router.post("/apply", verifyToken, requireRole("user", "admin"), upload.single("file"), leaveController.apply);
-router.get("/my", verifyToken, requireRole("user", "admin"), leaveController.my);
+router.post("/applyleave", verifyToken, requireRole("user", "admin"), upload.single("file"), leaveController.applyleave);
+router.get("/myleaves", verifyToken, requireRole("user", "admin"), leaveController.myleaves);
 
 // Admin routes
 router.get("/pending", verifyToken, requireRole("admin"), leaveController.pending);
@@ -23,6 +23,9 @@ router.put("/:id/status", verifyToken, requireRole("admin"), leaveController.set
 // Admin routes
 router.get("/approved", verifyToken, requireRole("admin"), leaveController.approved);
 router.get("/rejected", verifyToken, requireRole("admin"), leaveController.rejected);
+
+// Admin route to update leave status
+router.put("/:id/status", verifyToken, requireRole("admin"), leaveController.setStatus);
 
 module.exports = router;
 

@@ -60,3 +60,8 @@ exports.updateMe = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.getBalance = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  res.json(user.leaveBalance);
+};

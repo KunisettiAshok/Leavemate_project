@@ -9,7 +9,15 @@ const userSchema = new mongoose.Schema({
   phone: String,
   role: String,
   department: String,
-  photo: String
+  photo: String,
+
+  // NEW FIELD (LEAVE BALANCE)
+  leaveBalance: {
+    sick: { type: Number, default: 12 },
+    casual: { type: Number, default: 0 },
+    earned: { type: Number, default: 0 }
+  }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

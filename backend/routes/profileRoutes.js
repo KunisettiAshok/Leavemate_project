@@ -18,4 +18,7 @@ const upload = multer({ storage });
 router.get("/me", verifyToken, profileController.me);
 router.put("/me", verifyToken, upload.single("photo"), profileController.updateMe);
 
+// ✅ ADD THIS LINE ONLY
+router.get("/balance", verifyToken, profileController.getBalance);
+
 module.exports = router;

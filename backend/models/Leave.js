@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const leaveSchema = new mongoose.Schema({
+  empName: String,
   empId: String,
   leaveTypeId: String,
   startDate: Date,

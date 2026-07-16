@@ -4,7 +4,7 @@ import { LeaveService } from '../../services/leave.service';
 @Component({
   selector: 'app-leave-request',
   templateUrl: './leave-request.component.html',
-  styleUrls: ['./leave-request.component.scss']
+  styleUrls: ['./leave-request.component.scss'],
 })
 export class LeaveRequestComponent {
   msg = '';
@@ -20,11 +20,14 @@ export class LeaveRequestComponent {
     end_date: '',
     reason: '',
     notes: '',
-    file: null
+    file: null,
   };
 
-  constructor(private leave: LeaveService) { }
+  constructor(private leave: LeaveService) {}
 
+  ngOnInit() {
+    this.loadBalance();
+  }
   updateDays() {
     if (this.form.start_date && this.form.end_date) {
       const today = new Date();
@@ -56,7 +59,6 @@ export class LeaveRequestComponent {
     }
   }
 
-
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) this.form.file = input.files[0];
@@ -66,7 +68,12 @@ export class LeaveRequestComponent {
     this.msg = '';
     this.err = '';
 
-    if (!this.form.leave_type_id || !this.form.start_date || !this.form.end_date || !this.form.reason) {
+    if (
+      !this.form.leave_type_id ||
+      !this.form.start_date ||
+      !this.form.end_date ||
+      !this.form.reason
+    ) {
       this.err = 'Please fill all required fields';
       return;
     }
@@ -76,7 +83,7 @@ export class LeaveRequestComponent {
     }
 
     const fd = new FormData();
-    Object.keys(this.form).forEach(k => {
+    Object.keys(this.form).forEach((k) => {
       if (this.form[k] !== null) fd.append(k, this.form[k]);
     });
     fd.append('days', this.totalDays.toString());
@@ -84,10 +91,24 @@ export class LeaveRequestComponent {
     this.leave.applyLeave(fd).subscribe({
       next: (r: any) => {
         this.msg = r.message || 'Leave applied successfully';
-        this.form = { leave_type_id: '', duration: 'full', start_date: '', end_date: '', reason: '', notes: '', file: null };
+        this.form = {
+          leave_type_id: '',
+          duration: 'full',
+          start_date: '',
+          end_date: '',
+          reason: '',
+          notes: '',
+          file: null,
+        };
         this.totalDays = 0;
       },
-      error: (e) => this.err = e?.error?.message || 'Failed to apply leave'
+      error: (e) => (this.err = e?.error?.message || 'Failed to apply leave'),
+    });
+  }
+
+  loadBalance() {
+    this.leave.getBalance().subscribe({
+      next: (res) => (this.leaveBalance = res),
     });
   }
 }
