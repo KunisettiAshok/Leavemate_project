@@ -5,10 +5,10 @@ import { nodeApi } from 'src/environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class LeaveService {
-  
+
   private nodeApi = nodeApi;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Apply Leave
   applyLeave(data: FormData): Observable<any> {
@@ -26,11 +26,19 @@ export class LeaveService {
   }
 
   // Approve / Reject
-  updateApproval(id: string, status: 'approved' | 'rejected', comment?: string) {
-    return this.http.put(`${this.nodeApi}/${id}/leaves/status`, {
-      status,
-      manager_comment: comment || ''
-    });
+  // updateApproval(id: string, status: 'approved' | 'rejected', comment?: string) {
+  //   return this.http.put(`${this.nodeApi}/${id}/leaves/status`, {
+  //     status,
+  //     manager_comment: comment || ''
+  //   });
+  // }
+  updateApproval(id: string, status: 'approved' | 'rejected', comment?: string): Observable<any> {
+    return this.http.put(`${this.nodeApi}/leaves/${id}/status`,
+      {
+        status,
+        manager_comment: comment || ''
+      }
+    );
   }
 
   // Balance API
